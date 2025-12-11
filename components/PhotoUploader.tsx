@@ -56,7 +56,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onImageSelect, selectedIm
 
   if (selectedImage) {
     return (
-      <div className="relative group rounded-2xl overflow-hidden border border-zinc-700 shadow-2xl transition-all duration-300">
+      <div className="relative group rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 shadow-2xl transition-all duration-300">
         <img 
           src={selectedImage} 
           alt="Reference Model" 
@@ -99,7 +99,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onImageSelect, selectedIm
         relative h-80 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center cursor-pointer transition-all duration-300
         ${isDragging 
           ? 'border-purple-500 bg-purple-500/10 scale-[1.02]' 
-          : 'border-zinc-700 hover:border-zinc-500 hover:bg-zinc-900/50 bg-zinc-900/30'}
+          : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-500 bg-white dark:bg-zinc-900/30 hover:bg-zinc-50 dark:hover:bg-zinc-900/50'}
       `}
     >
       <input 
@@ -110,13 +110,13 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ onImageSelect, selectedIm
         accept="image/*"
       />
       
-      <div className="bg-zinc-800 p-4 rounded-full mb-4 shadow-xl ring-1 ring-white/10">
-        <Upload size={32} className="text-purple-400" />
+      <div className="bg-zinc-100 dark:bg-zinc-800 p-4 rounded-full mb-4 shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+        <Upload size={32} className="text-purple-500 dark:text-purple-400" />
       </div>
-      <h3 className="text-xl font-semibold text-zinc-200 mb-2">Upload Reference Photo</h3>
+      <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-200 mb-2">Upload Reference Photo</h3>
       <p className="text-zinc-500 text-sm max-w-xs text-center">
         Drop your model's photo here, or click to browse. 
-        <br/><span className="text-zinc-600 text-xs mt-2 block">Supported: JPG, PNG, WEBP</span>
+        <br/><span className="text-zinc-400 dark:text-zinc-600 text-xs mt-2 block">Supported: JPG, PNG, WEBP</span>
       </p>
     </div>
   );

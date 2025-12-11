@@ -1,4 +1,5 @@
-import { GoogleGenAI, Type, Schema } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/genai";
+import type { Schema } from "@google/genai";
 import { Persona, CameraSettings, CreatorAttributes } from "../types";
 
 // Helper to get the AI client with the latest key

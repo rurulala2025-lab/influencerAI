@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Info, AlertTriangle, Loader2, Camera, Clapperboard, UserPlus, Settings } from 'lucide-react';
+import { Sparkles, Info, AlertTriangle, Loader2, Camera, Clapperboard, UserPlus, Settings, Moon, Sun } from 'lucide-react';
 import PhotoUploader from './components/PhotoUploader';
 import Controls from './components/Controls';
 import CameraControls from './components/CameraControls';
@@ -17,6 +17,32 @@ const App: React.FC = () => {
   const [refImage, setRefImage] = useState<string | null>(null);
   const [persona, setPersona] = useState<Persona | null>(null);
   
+  // Theme State
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('theme');
+      if (stored) return stored as 'dark' | 'light';
+      // Default to what the HTML classlist currently has (set by index.html script)
+      if (document.documentElement.classList.contains('dark')) return 'dark';
+      return 'light';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
   // Story Mode State
   const [stories, setStories] = useState<StoryBatch[]>([]);
   const [scenarioInput, setScenarioInput] = useState("");
@@ -186,7 +212,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-purple-500/30">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 selection:bg-purple-500/30 transition-colors duration-300">
       {/* Settings Modal */}
       <SettingsModal 
         isOpen={isSettingsOpen} 
@@ -228,6 +254,16 @@ const App: React.FC = () => {
               </button>
             </div>
             
+            <div className="h-6 w-px bg-white/20"></div>
+
+            <button 
+              onClick={toggleTheme}
+              className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+              title={theme === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
             <button 
               onClick={() => setIsSettingsOpen(true)}
               className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors relative"
@@ -246,7 +282,7 @@ const App: React.FC = () => {
       <main className="max-w-7xl mx-auto px-6 py-10">
         
         {!hasApiKey && (
-           <div className="mb-8 bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3 text-red-200 animate-in fade-in slide-in-from-top-4">
+           <div className="mb-8 bg-red-500/10 border border-red-500/20 rounded-xl p-4 flex items-center gap-3 text-red-600 dark:text-red-200 animate-in fade-in slide-in-from-top-4">
              <AlertTriangle className="shrink-0" />
              <div className="flex-1">
                <p className="font-bold">Missing API Key</p>
@@ -254,7 +290,7 @@ const App: React.FC = () => {
              </div>
              <button 
                 onClick={() => setIsSettingsOpen(true)}
-                className="bg-red-500/20 hover:bg-red-500/30 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap"
+                className="bg-red-500/10 hover:bg-red-500/20 text-red-700 dark:text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap border border-red-500/20"
              >
                 Open Settings
              </button>
@@ -279,7 +315,7 @@ const App: React.FC = () => {
               <>
                 <section>
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-white">1. Identity Source</h2>
+                    <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">1. Identity Source</h2>
                   </div>
                   
                   <PhotoUploader 
@@ -289,7 +325,7 @@ const App: React.FC = () => {
                   />
                   
                   {appState === AppState.ANALYZING && (
-                    <div className="mt-4 p-4 bg-zinc-900 border border-zinc-800 rounded-xl flex items-center justify-center gap-3 text-purple-400 animate-pulse">
+                    <div className="mt-4 p-4 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl flex items-center justify-center gap-3 text-purple-600 dark:text-purple-400 animate-pulse">
                       <Loader2 className="animate-spin" />
                       <span className="text-sm font-medium">Analyzing visual identity...</span>
                     </div>
@@ -330,15 +366,15 @@ const App: React.FC = () => {
             )}
 
             {error && (
-               <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 text-red-200 text-sm rounded-lg flex flex-col gap-2 animate-in fade-in slide-in-from-top-2">
+               <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-200 text-sm rounded-lg flex flex-col gap-2 animate-in fade-in slide-in-from-top-2">
                  <div className="flex items-start gap-2">
-                    <AlertTriangle size={16} className="shrink-0 mt-0.5 text-red-400" />
+                    <AlertTriangle size={16} className="shrink-0 mt-0.5 text-red-500 dark:text-red-400" />
                     <span>{error}</span>
                  </div>
                  {isApiKeyError && (
                    <button 
                       onClick={() => setIsSettingsOpen(true)}
-                      className="self-end bg-red-500/20 hover:bg-red-500/30 text-white px-3 py-1.5 rounded text-xs font-semibold transition-colors"
+                      className="self-end bg-red-500/10 hover:bg-red-500/20 text-red-700 dark:text-white px-3 py-1.5 rounded text-xs font-semibold transition-colors border border-red-500/20"
                    >
                       Update API Key
                    </button>
@@ -353,19 +389,19 @@ const App: React.FC = () => {
                 {stories.length > 0 ? (
                   <ResultGallery stories={stories} />
                 ) : (
-                  <div className="h-full min-h-[500px] flex flex-col items-center justify-center text-zinc-600 border-2 border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20">
+                  <div className="h-full min-h-[500px] flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-600 border-2 border-dashed border-zinc-200 dark:border-zinc-800 rounded-3xl bg-white/50 dark:bg-zinc-900/20">
                     <div className="relative mb-6">
                       <div className={`absolute inset-0 blur-xl rounded-full ${activeTab === 'story' ? 'bg-purple-500/20' : activeTab === 'studio' ? 'bg-orange-500/20' : 'bg-blue-500/20'}`}></div>
-                      {activeTab === 'story' && <Clapperboard size={64} className="relative text-zinc-700" />}
-                      {activeTab === 'studio' && <Camera size={64} className="relative text-zinc-700" />}
-                      {activeTab === 'maker' && <UserPlus size={64} className="relative text-zinc-700" />}
+                      {activeTab === 'story' && <Clapperboard size={64} className="relative text-zinc-300 dark:text-zinc-700" />}
+                      {activeTab === 'studio' && <Camera size={64} className="relative text-zinc-300 dark:text-zinc-700" />}
+                      {activeTab === 'maker' && <UserPlus size={64} className="relative text-zinc-300 dark:text-zinc-700" />}
                     </div>
-                    <h3 className="text-xl font-bold text-zinc-500 mb-2">
+                    <h3 className="text-xl font-bold text-zinc-400 dark:text-zinc-500 mb-2">
                        {activeTab === 'story' && "Ready to create stories"}
                        {activeTab === 'studio' && "Studio is empty"}
                        {activeTab === 'maker' && "Design your Model"}
                     </h3>
-                    <p className="max-w-xs text-center text-sm mb-6">
+                    <p className="max-w-xs text-center text-sm mb-6 text-zinc-400 dark:text-zinc-600">
                       {activeTab === 'story' && "Generate 8-frame lifestyle stories based on the persona."}
                       {activeTab === 'studio' && "Adjust camera settings to take professional studio shots."}
                       {activeTab === 'maker' && "Use the form on the left to generate a unique AI Influencer identity."}

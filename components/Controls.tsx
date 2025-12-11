@@ -29,16 +29,16 @@ const Controls: React.FC<ControlsProps> = ({
   };
 
   return (
-    <div className="bg-zinc-900/50 backdrop-blur-sm border border-zinc-800 rounded-2xl p-6 shadow-xl">
+    <div className="bg-white/80 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-xl transition-colors">
       <div className="flex items-center gap-2 mb-6">
         <Clapperboard className="text-purple-500" size={24} />
-        <h2 className="text-xl font-bold text-white">Story Director</h2>
+        <h2 className="text-xl font-bold text-zinc-900 dark:text-white">Story Director</h2>
       </div>
 
       <div className="space-y-6">
         
         <div className="space-y-3">
-          <label className="text-sm font-semibold text-zinc-400 flex items-center gap-2">
+          <label className="text-sm font-semibold text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
             <Wand2 size={14} /> 
             Scenario Prompt (Optional)
           </label>
@@ -46,10 +46,10 @@ const Controls: React.FC<ControlsProps> = ({
             value={scenarioInput}
             onChange={(e) => setScenarioInput(e.target.value)}
             placeholder={`e.g. ${persona ? persona.nickname : 'She'} goes on a luxury ski trip in the Alps, ending with hot cocoa by the fire.`}
-            className="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-sm text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all placeholder-zinc-600 min-h-[100px] resize-none"
+            className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm text-zinc-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all placeholder-zinc-400 dark:placeholder-zinc-600 min-h-[100px] resize-none"
             disabled={disabled || isProcessing}
           />
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">
             Leave empty to let the AI invent a day based on the persona.
           </p>
         </div>
@@ -60,10 +60,10 @@ const Controls: React.FC<ControlsProps> = ({
             onClick={() => onGenerate(true)}
             disabled={disabled || isProcessing}
             className={`
-              relative overflow-hidden group py-4 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition-all border border-zinc-700
+              relative overflow-hidden group py-4 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition-all border
               ${disabled || isProcessing
-                ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' 
-                : 'bg-zinc-800 hover:bg-zinc-700 text-white hover:border-zinc-600'}
+                ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 border-zinc-200 dark:border-zinc-800 cursor-not-allowed' 
+                : 'bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-700 dark:text-white border-zinc-200 dark:border-zinc-700'}
             `}
           >
             <Sparkles size={16} className={isProcessing ? "" : "text-yellow-500"} />
@@ -77,7 +77,7 @@ const Controls: React.FC<ControlsProps> = ({
             className={`
               py-4 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition-all
               ${disabled || isProcessing || !scenarioInput.trim()
-                ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-800' 
+                ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 border border-zinc-200 dark:border-zinc-800 cursor-not-allowed' 
                 : 'bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white hover:scale-[1.01] hover:shadow-purple-500/20'}
             `}
           >
