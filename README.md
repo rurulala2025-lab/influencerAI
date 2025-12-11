@@ -1,11 +1,31 @@
-<div align="center">
+# InfluencerAI
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+A virtual influencer generator using Google Gemini API.
 
-  <h1>Built with AI Studio</h2>
+## Local Development
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+1.  Install dependencies:
+    ```bash
+    npm install
+    ```
+2.  Create a `.env` file in the root directory and add your Gemini API Key:
+    ```env
+    API_KEY=your_google_gemini_api_key_here
+    ```
+3.  Start the development server:
+    ```bash
+    npm run dev
+    ```
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Deploy to Vercel
 
-</div>
+1.  Push this repository to GitHub.
+2.  Go to the [Vercel Dashboard](https://vercel.com/) and click **"Add New..."** -> **"Project"**.
+3.  Import your GitHub repository.
+4.  In the **"Configure Project"** screen:
+    *   **Framework Preset**: Vite
+    *   **Root Directory**: ./ (default)
+    *   **Environment Variables**:
+        *   Key: `API_KEY`
+        *   Value: `Your Actual Gemini API Key`
+5.  Click **Deploy**.
