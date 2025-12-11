@@ -1,6 +1,7 @@
+
 import React from 'react';
-import { Camera, RefreshCw, Aperture, Maximize, MoveVertical, RotateCw } from 'lucide-react';
-import { CameraSettings } from '../types';
+import { Camera, RefreshCw, Aperture, Maximize, MoveVertical, RotateCw, Layout } from 'lucide-react';
+import { CameraSettings, AspectRatio } from '../types';
 
 interface CameraControlsProps {
   settings: CameraSettings;
@@ -20,9 +21,11 @@ const CameraControls: React.FC<CameraControlsProps> = ({
   disabled 
 }) => {
 
-  const handleChange = (key: keyof CameraSettings, value: number | boolean) => {
+  const handleChange = (key: keyof CameraSettings, value: any) => {
     setSettings(prev => ({ ...prev, [key]: value }));
   };
+
+  const ratios: AspectRatio[] = ["1:1", "3:4", "4:3", "9:16", "16:9"];
 
   return (
     <div className="bg-white/80 dark:bg-zinc-900/50 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-2xl p-6 shadow-xl animate-in fade-in slide-in-from-right-4 duration-500 transition-colors">
@@ -38,6 +41,30 @@ const CameraControls: React.FC<CameraControlsProps> = ({
 
       <div className="space-y-8 bg-zinc-50 dark:bg-zinc-950/50 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800">
         
+        {/* Aspect Ratio Selector */}
+        <div className="space-y-3">
+          <div className="flex justify-between text-sm text-zinc-500 dark:text-zinc-400">
+             <span className="flex items-center gap-1"><Layout size={12}/> Aspect Ratio</span>
+          </div>
+          <div className="flex gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl overflow-x-auto">
+             {ratios.map(ratio => (
+               <button
+                 key={ratio}
+                 onClick={() => handleChange('aspectRatio', ratio)}
+                 disabled={disabled}
+                 className={`
+                   flex-1 px-3 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap
+                   ${settings.aspectRatio === ratio 
+                     ? 'bg-white dark:bg-zinc-700 text-orange-600 dark:text-orange-400 shadow-sm ring-1 ring-black/5 dark:ring-white/5' 
+                     : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200'}
+                 `}
+               >
+                 {ratio}
+               </button>
+             ))}
+          </div>
+        </div>
+
         {/* Rotation Slider */}
         <div className="space-y-3">
           <div className="flex justify-between text-sm text-zinc-500 dark:text-zinc-400">

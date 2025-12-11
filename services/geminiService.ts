@@ -1,6 +1,7 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 import type { Schema } from "@google/genai";
-import { Persona, CameraSettings, CreatorAttributes } from "../types";
+import { Persona, CameraSettings, CreatorAttributes, AspectRatio } from "../types";
 
 // Helper to get the AI client with the latest key
 const getAIClient = () => {
@@ -207,7 +208,7 @@ export const planStory = async (persona: Persona, userScenario?: string): Promis
  * UPGRADED: Uses gemini-3-pro-image-preview
  * STYLE UPDATE: "Beauty Photography", smooth skin.
  */
-const generateSingleImage = async (referenceImageBase64: string, prompt: string): Promise<string> => {
+const generateSingleImage = async (referenceImageBase64: string, prompt: string, aspectRatio: string): Promise<string> => {
   const ai = getAIClient();
   const fullPrompt = `
     Generate a high-quality influencer photo based on the reference person.
@@ -232,7 +233,7 @@ const generateSingleImage = async (referenceImageBase64: string, prompt: string)
       },
       config: {
         imageConfig: {
-          aspectRatio: "1:1",
+          aspectRatio: aspectRatio,
           imageSize: "2K"
         }
       }
@@ -294,7 +295,7 @@ export const generateStudioImage = async (
     Lighting: High-end fashion studio lighting, softbox, rim light, flawless beauty retouching style.
   `;
 
-  const url = await generateSingleImage(referenceImageBase64, prompt);
+  const url = await generateSingleImage(referenceImageBase64, prompt, settings.aspectRatio);
   return { url, prompt };
 };
 
@@ -303,12 +304,13 @@ export const generateStudioImage = async (
  */
 export const generateStoryBatch = async (
   referenceImageBase64: string,
-  prompts: string[]
+  prompts: string[],
+  aspectRatio: string
 ): Promise<{ url: string; prompt: string }[]> => {
   
   const promises = prompts.map(async (prompt) => {
     try {
-      const url = await generateSingleImage(referenceImageBase64, prompt);
+      const url = await generateSingleImage(referenceImageBase64, prompt, aspectRatio);
       return { url, prompt, success: true };
     } catch (e) {
       console.error("Failed to generate frame:", prompt, e);

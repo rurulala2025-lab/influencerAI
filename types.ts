@@ -1,3 +1,4 @@
+
 export interface Persona {
   nickname: string;
   age: string;          // e.g., "20대 중반"
@@ -22,11 +23,14 @@ export interface StoryBatch {
   images: GeneratedImage[];
 }
 
+export type AspectRatio = "1:1" | "3:4" | "4:3" | "9:16" | "16:9";
+
 export interface CameraSettings {
   rotation: number; // -90 to 90
   zoom: number;     // 0 to 10
   vertical: number; // -1 to 1
   isWideAngle: boolean;
+  aspectRatio: AspectRatio;
 }
 
 export interface CreatorAttributes {

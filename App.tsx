@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Info, AlertTriangle, Loader2, Camera, Clapperboard, UserPlus, Settings, Moon, Sun } from 'lucide-react';
 import PhotoUploader from './components/PhotoUploader';
@@ -7,7 +8,7 @@ import ResultGallery from './components/ResultGallery';
 import PersonaCard from './components/PersonaCard';
 import PersonaCreator from './components/PersonaCreator';
 import SettingsModal from './components/SettingsModal';
-import { Persona, StoryBatch, AppState, CameraSettings, CreatorAttributes } from './types';
+import { Persona, StoryBatch, AppState, CameraSettings, CreatorAttributes, AspectRatio } from './types';
 import { analyzePersona, planStory, generateStoryBatch, generateStudioImage, generateReferenceImage } from './services/geminiService';
 
 type Tab = 'story' | 'studio' | 'maker';
@@ -46,13 +47,15 @@ const App: React.FC = () => {
   // Story Mode State
   const [stories, setStories] = useState<StoryBatch[]>([]);
   const [scenarioInput, setScenarioInput] = useState("");
+  const [storyAspectRatio, setStoryAspectRatio] = useState<AspectRatio>("1:1");
   
   // Studio Mode State
   const [cameraSettings, setCameraSettings] = useState<CameraSettings>({
     rotation: 0,
     zoom: 0,
     vertical: 0,
-    isWideAngle: false
+    isWideAngle: false,
+    aspectRatio: "1:1"
   });
   
   const [appState, setAppState] = useState<AppState>(AppState.IDLE);
@@ -149,7 +152,7 @@ const App: React.FC = () => {
       const prompts = await planStory(persona, currentScenario);
       
       setAppState(AppState.GENERATING);
-      const generatedImages = await generateStoryBatch(refImage, prompts);
+      const generatedImages = await generateStoryBatch(refImage, prompts, storyAspectRatio);
       
       if (generatedImages.length === 0) throw new Error("Failed to generate any images.");
 
@@ -347,6 +350,8 @@ const App: React.FC = () => {
                         persona={persona}
                         scenarioInput={scenarioInput}
                         setScenarioInput={setScenarioInput}
+                        aspectRatio={storyAspectRatio}
+                        setAspectRatio={setStoryAspectRatio}
                         onGenerate={handleGenerateStory}
                         appState={appState}
                         disabled={!persona || !hasApiKey}
@@ -357,7 +362,7 @@ const App: React.FC = () => {
                         setSettings={setCameraSettings}
                         onGenerate={handleGenerateStudio}
                         isGenerating={appState === AppState.GENERATING}
-                        onReset={() => setCameraSettings({ rotation: 0, zoom: 0, vertical: 0, isWideAngle: false })}
+                        onReset={() => setCameraSettings({ rotation: 0, zoom: 0, vertical: 0, isWideAngle: false, aspectRatio: "1:1" })}
                         disabled={!persona || !hasApiKey}
                     />
                   )}
